@@ -1,0 +1,5 @@
+# Note: Behavior of this file can be checked with git check-attr -a <file_to_check>
+# See also https://git-scm.com/docs/git-check-attr
+
+# Designed for Linux so everything better has \n and nothing else
+* text eol=lf
