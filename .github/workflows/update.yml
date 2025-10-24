@@ -1,0 +1,44 @@
+name: Updater
+
+on:
+  schedule:
+    - cron: '11 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          pull: true
+          load: true
+          tags: zonefile-updater
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Checkout cache branch
+        uses: actions/checkout@v5
+        with:
+          ref: 'cached'
+          path: 'cached'
+
+      - name: Run
+        run: |
+          set -e
+          docker network create --ipv6 work-net || echo "Already exists"
+          # docker run --rm -v $PWD:/workdir -w /workdir --entrypoint /bin/bash zonefile-updater /workdir/generate.sh
+          docker network rm work-net || echo "Failed to remove"
