@@ -14,85 +14,85 @@ permissions:
   contents: write
 
 jobs:
-  # update:
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 30
-  #   steps:
-  #     - uses: actions/checkout@v5
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
 
-  #     - name: Set up QEMU
-  #       uses: docker/setup-qemu-action@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-  #     - name: Build
-  #       uses: docker/build-push-action@v6
-  #       with:
-  #         pull: true
-  #         load: true
-  #         tags: zonefile-updater
-  #         cache-from: type=gha
-  #         cache-to: type=gha,mode=max
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          pull: true
+          load: true
+          tags: zonefile-updater
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-  #     - name: Checkout cache branch
-  #       uses: actions/checkout@v5
-  #       continue-on-error: true # Branch may not exist
-  #       with:
-  #         ref: 'cached'
-  #         path: 'cached'
+      - name: Checkout cache branch
+        uses: actions/checkout@v5
+        continue-on-error: true # Branch may not exist
+        with:
+          ref: 'cached'
+          path: 'cached'
       
-  #     - name: Checkout split cache branch
-  #       uses: actions/checkout@v5
-  #       continue-on-error: true # Branch may not exist
-  #       with:
-  #         ref: 'cached-split'
-  #         path: 'cached-split'
+      - name: Checkout split cache branch
+        uses: actions/checkout@v5
+        continue-on-error: true # Branch may not exist
+        with:
+          ref: 'cached-split'
+          path: 'cached-split'
 
-  #     - name: Run
-  #       run: |
-  #         set -e
-  #         docker network create --ipv6 work || echo "Already exists"
-  #         docker run --rm -v $PWD:/workdir \
-  #           -w /workdir \
-  #           --network work \
-  #           --entrypoint /bin/bash \
-  #           ${{ inputs.skip_download && '-e SKIP_DOWNLOAD=true' || '' }} \
-  #           zonefile-updater /workdir/generate.sh
-  #         docker network rm work || echo "Failed to remove"
+      - name: Run
+        run: |
+          set -e
+          docker network create --ipv6 work || echo "Already exists"
+          docker run --rm -v $PWD:/workdir \
+            -w /workdir \
+            --network work \
+            --entrypoint /bin/bash \
+            ${{ inputs.skip_download && '-e SKIP_DOWNLOAD=true' || '' }} \
+            zonefile-updater /workdir/generate.sh
+          docker network rm work || echo "Failed to remove"
 
-  #     - name: Save generated
-  #       uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
-  #         publish_branch: generated
-  #         publish_dir: ./out
-  #         enable_jekyll: true # .nojekyll is not needed
+      - name: Save generated
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: generated
+          publish_dir: ./out
+          enable_jekyll: true # .nojekyll is not needed
 
-  #     - name: Save cache
-  #       uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
-  #       continue-on-error: true # Just cache
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
-  #         publish_branch: cached
-  #         publish_dir: ./cached
-  #         force_orphan: true
-  #         enable_jekyll: true # .nojekyll is not needed
-  #         exclude_assets: 'latest-bview.gz' # Too big for repo
+      - name: Save cache
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        continue-on-error: true # Just cache
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: cached
+          publish_dir: ./cached
+          force_orphan: true
+          enable_jekyll: true # .nojekyll is not needed
+          exclude_assets: 'latest-bview.gz' # Too big for repo
 
-  #     - name: Save split cache
-  #       uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
-  #       continue-on-error: true # Just cache
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
-  #         publish_branch: cached-split
-  #         publish_dir: ./cached-split
-  #         force_orphan: true
-  #         enable_jekyll: true # .nojekyll is not needed
+      - name: Save split cache
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        continue-on-error: true # Just cache
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: cached-split
+          publish_dir: ./cached-split
+          force_orphan: true
+          enable_jekyll: true # .nojekyll is not needed
 
   mirror:
     runs-on: ubuntu-latest
-    # needs: update
+    needs: update
     timeout-minutes: 5
     steps:
       - run: |
