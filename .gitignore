@@ -2,3 +2,4 @@ cached-split/
 cached/
 out/
 *.zone
+nytprof*
