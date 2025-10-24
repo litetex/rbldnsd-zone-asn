@@ -60,17 +60,21 @@ jobs:
 
       - name: Save cache
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        continue-on-error: true # Just cache
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: cached
           publish_dir: ./cached
           force_orphan: true
+          enable_jekyll: true # .nojekyll is not needed 
           exclude_assets: 'latest-bview.gz' # Too big for repo
 
       - name: Save split cache
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        continue-on-error: true # Just cache
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: cached-split
           publish_dir: ./cached-split
           force_orphan: true
+          enable_jekyll: true # .nojekyll is not needed
