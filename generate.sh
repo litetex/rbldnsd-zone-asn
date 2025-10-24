@@ -13,7 +13,6 @@ dos2unix dwl_src.txt
 readarray -t DWL_SRC < dwl_src.txt
 
 cached_file_names=()
-trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
 for dwl_url in "${DWL_SRC[@]}"
 do
     file_name=$(echo ${dwl_url##*/})
@@ -69,6 +68,8 @@ do
         rm -f $cached_file
     fi
 done
+
+ls -lha $CACHE_DIR
 
 rm -f asn.zone asn6.zone
 
