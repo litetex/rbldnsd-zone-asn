@@ -18,6 +18,10 @@ for dwl_url in "${DWL_SRC[@]}"
 do
     file_name=$(echo ${dwl_url##*/})
     cached_file_names+=($file_name)
+
+    if [ "$SKIP_DOWNLOAD" = true ]; then
+        continue;
+    fi
     {
         echo "Downloading $dwl_url to $file_name"
         if wget --timeout=600 -qO - $dwl_url > $DWL_TMP_DIR/$file_name; then
@@ -66,20 +70,20 @@ do
     fi
 done
 
-# rm -f asn.zone asn6.zone
+rm -f asn.zone asn6.zone
 
-# echo "Running generation script (may take a moment)"
-# perl asn.pl --target $CACHE_DIR
+echo "Running generation script (may take a moment)"
+perl asn.pl --target $CACHE_DIR
 
-# echo "Generation done"
+echo "Generation done"
 
-# rm -rf out
-# mkdir -p out
+rm -rf out
+mkdir -p out
 
-# for asnZoneFileName in asn asn6; do
-#     echo "Sorting and finalizing zone file: $asnZoneFileName"
-#     tail -n +3 $asnZoneFileName.zone | sort --parallel=4 > out/$asnZoneFileName.zone
-# done
+for asnZoneFileName in asn asn6; do
+    echo "Sorting and finalizing zone file: $asnZoneFileName"
+    tail -n +3 $asnZoneFileName.zone | sort --parallel=4 > out/$asnZoneFileName.zone
+done
 
 mkdir -p $SPLIT_CACHE_DIR
 if [ -f $CACHE_DIR/latest-bview.gz ] && [ "$restoredLatestBView" = false ]; then
