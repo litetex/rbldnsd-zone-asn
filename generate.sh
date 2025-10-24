@@ -74,6 +74,10 @@ ls -lha $CACHE_DIR
 rm -f asn.zone asn6.zone
 
 echo "Running generation script (may take a moment)"
+# Install profiler with
+# apt-get install build-essential
+# cpan Devel::NYTProf
+# -d:NYTProf 
 perl asn.pl --target $CACHE_DIR
 
 echo "Generation done"
