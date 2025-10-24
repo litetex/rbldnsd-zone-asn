@@ -90,7 +90,7 @@ if [ -f $CACHE_DIR/latest-bview.gz ] && [ "$restoredLatestBView" = false ]; then
     pigz -d < $CACHE_DIR/latest-bview.gz > /tmp/latest-bview-work/latest-bview
 
     echo "Recompressing with much more efficient zstd"
-    zstd -T0 -19 /tmp/latest-bview-work/latest-bview
+    zstd -T0 --long -14 /tmp/latest-bview-work/latest-bview
     rm -f /tmp/latest-bview-work/latest-bview
 
     echo "Splitting"
