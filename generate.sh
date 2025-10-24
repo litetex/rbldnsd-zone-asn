@@ -3,6 +3,7 @@
 mkdir -p cached
 
 CACHE_DIR=/workdir/cached
+SPLIT_CACHE_DIR=/workdir/cached-split
 
 DWL_TMP_DIR=/workdir/tmp-dwl
 rm -rf $DWL_TMP_DIR
@@ -36,6 +37,26 @@ wait
 echo "Finished downloading"
 rm -rf $DWL_TMP_DIR
 
+restoredLatestBView=false
+if [ ! -f $CACHE_DIR/latest-bview.gz ]; then
+    echo "Trying to restore latest-bview.gz from split cache"
+    if [ -f $SPLIT_CACHE_DIR/latest-bview.zst.01 ]; then
+
+        echo "Reassembling..."
+        cat $SPLIT_CACHE_DIR/latest-bview.zst.* > /tmp/latest-bview.zst
+
+        echo "Decompressing using zstd"
+        zstd --decompress /tmp/latest-bview.zst
+        rm -f /tmp/latest-bview.zst
+
+        echo "Gzipping"
+        pigz --fast < /tmp/latest-bview > $CACHE_DIR/latest-bview.gz
+        rm -f /tmp/latest-bview
+
+        restoredLatestBView=true
+    fi
+fi
+
 for cached_file in $CACHE_DIR/*
 do
     file_name=$(basename $cached_file)
@@ -59,3 +80,24 @@ done
 #     echo "Sorting and finalizing zone file: $asnZoneFileName"
 #     tail -n +3 $asnZoneFileName.zone | sort --parallel=4 > out/$asnZoneFileName.zone
 # done
+
+mkdir -p $SPLIT_CACHE_DIR
+if [ -f $CACHE_DIR/latest-bview.gz ] && [ "$restoredLatestBView" = false ]; then
+    echo "Saving latest-bview.gz to split cache"
+
+    echo "Decompressing gzip"
+    mkdir -p /tmp/latest-bview-work
+    pigz -d < $CACHE_DIR/latest-bview.gz > /tmp/latest-bview-work/latest-bview
+
+    echo "Recompressing with much more efficient zstd"
+    zstd -T0 -19 /tmp/latest-bview-work/latest-bview
+    rm -f /tmp/latest-bview-work/latest-bview
+
+    echo "Splitting"
+    split -b 50000000 -d /tmp/latest-bview-work/latest-bview.zst /tmp/latest-bview-work/latest-bview.zst.
+    rm -f /tmp/latest-bview-work/latest-bview.zst
+
+    echo "Moving into correct directory"
+    rm -f $SPLIT_CACHE_DIR/latest-bview.zst*
+    mv /tmp/latest-bview-work/latest-bview.zst.* $SPLIT_CACHE_DIR/
+fi

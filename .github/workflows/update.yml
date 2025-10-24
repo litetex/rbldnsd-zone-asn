@@ -36,6 +36,13 @@ jobs:
         with:
           ref: 'cached'
           path: 'cached'
+      
+      - name: Checkout split cache branch
+        uses: actions/checkout@v5
+        continue-on-error: true # Branch may not exist
+        with:
+          ref: 'cached-split'
+          path: 'cached-split'
 
       - name: Run
         run: |
@@ -57,4 +64,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: cached
           publish_dir: ./cached
+          force_orphan: true
+
+      - name: Save split cache
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: cached-split
+          publish_dir: ./cached-split
           force_orphan: true
