@@ -1,0 +1,42 @@
+services:
+  zonefile-updater:
+    build:
+      context: zonefile-updater/_build
+    environment:
+      - GIT_REPO_STORE=/zonefiles
+      - GIT_REPO_URL=https://codeberg.org/litetex/rbldnsd-zone-asn.git
+      - GIT_BRANCH=generated
+      - UPDATE_INTERVAL=1h
+    volumes:
+      - ./_data/zonefiles:/zonefiles
+
+  rbldnsd:
+    build:
+      context: rbldnsd/_build
+    depends_on:
+      - zonefile-updater
+    networks:
+      asn-res:
+        ipv6_address: fd00:5353::99
+    ports:
+      - 5353:5353
+    volumes:
+      - ./_data/zonefiles:/zonefiles
+  
+  demo-dns-client:
+    container_name: demo-dns-client
+    build:
+      context: demo-dns-client/_build
+    networks:
+      - asn-res
+
+networks:
+  asn-res:
+    name: "asn-res"
+    enable_ipv6: true
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: fd00:5353::/120
+          gateway: fd00:5353::1
