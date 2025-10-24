@@ -45,17 +45,17 @@ do
     fi
 done
 
-rm -f asn.zone asn6.zone
+# rm -f asn.zone asn6.zone
 
-echo "Running generation script (may take a moment)"
-perl asn.pl --target $CACHE_DIR
+# echo "Running generation script (may take a moment)"
+# perl asn.pl --target $CACHE_DIR
 
-echo "Generation done"
+# echo "Generation done"
 
-rm -rf out
-mkdir -p out
+# rm -rf out
+# mkdir -p out
 
-for asnZoneFileName in asn asn6; do
-    echo "Sorting and finalizing zone file: $asnZoneFileName"
-    tail -n +3 $asnZoneFileName.zone | sort --parallel=4 > out/$asnZoneFileName.zone
-done
+# for asnZoneFileName in asn asn6; do
+#     echo "Sorting and finalizing zone file: $asnZoneFileName"
+#     tail -n +3 $asnZoneFileName.zone | sort --parallel=4 > out/$asnZoneFileName.zone
+# done

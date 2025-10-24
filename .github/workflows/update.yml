@@ -44,6 +44,13 @@ jobs:
           docker run --rm -v $PWD:/workdir -w /workdir --network work --entrypoint /bin/bash zonefile-updater /workdir/generate.sh
           docker network rm work || echo "Failed to remove"
 
+      # - name: Save generated
+      #   uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_branch: generated
+      #     publish_dir: ./out
+
       - name: Save cache
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         with:
@@ -51,10 +58,3 @@ jobs:
           publish_branch: cached
           publish_dir: ./cached
           force_orphan: true
-
-      - name: Save generated
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: generated
-          publish_dir: ./out
