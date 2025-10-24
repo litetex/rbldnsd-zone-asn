@@ -96,10 +96,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - run: |
-          git clone --bare https://github.com/litetex/rbldnsd-zone-asn.git --single-branch
+          git clone --bare https://github.com/litetex/rbldnsd-zone-asn.git --single-branch --branch generated
           cd rbldnsd-zone-asn.git
-          echo "Fetching generated branch"
-          git fetch origin generated
           echo "Starting push"
           git push --mirror https://litetex:${{ secrets.CB_TOKEN }}@codeberg.org/litetex/rbldnsd-zone-asn.git
           echo "Done"
