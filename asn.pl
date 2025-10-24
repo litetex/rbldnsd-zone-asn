@@ -7,6 +7,7 @@
 # Summary of applied changes
 # * Migrated sources to https
 # * Changed base domain to example.org to prevent confusion
+# * Optimized IPv4/6 detection
 
 use warnings;
 use strict;
@@ -120,7 +121,7 @@ foreach my $u (@{ $config{'bgp_sources'} }) {
         my $prefix = $e[F_PREFIX];
         my $ip_ver = 6;
 
-        if ($prefix =~ /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\/\d{1,2}$/) {
+        if (index($prefix, ":") == -1) {
             $ip_ver = 4;
         }
 
