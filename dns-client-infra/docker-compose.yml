@@ -10,6 +10,10 @@ services:
       - UPDATE_INTERVAL=1h
     volumes:
       - ./_data/zonefiles:/zonefiles
+    deploy:
+      resources:
+        limits:
+          memory: 250M
 
   rbldnsd:
     build:
@@ -26,7 +30,11 @@ services:
       - 5353:5353
     volumes:
       - ./_data/zonefiles:/zonefiles
-  
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+
   demo-dns-client:
     container_name: demo-dns-client
     build:
