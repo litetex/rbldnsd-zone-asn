@@ -2,7 +2,7 @@ name: Updater
 
 on:
   schedule:
-    - cron: '13 7 * * *'
+    - cron: '55 5 * * *'
   workflow_dispatch:
     inputs:
       skip_download:
@@ -60,6 +60,11 @@ jobs:
             ${{ inputs.skip_download && '-e SKIP_DOWNLOAD=true' || '' }} \
             zonefile-updater /workdir/generate.sh
           docker network rm work || echo "Failed to remove"
+      
+      - name: Get Timestamp
+        id: timestamp
+        run:
+          echo "timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_OUTPUT
 
       - name: Save generated
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
@@ -68,6 +73,7 @@ jobs:
           publish_branch: generated
           publish_dir: ./out
           enable_jekyll: true # .nojekyll is not needed
+          full_commit_message: ${{ steps.timestamp.outputs.timestamp }}
 
       - name: Save cache
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
@@ -79,6 +85,7 @@ jobs:
           force_orphan: true
           enable_jekyll: true # .nojekyll is not needed
           exclude_assets: 'latest-bview.gz' # Too big for repo
+          full_commit_message: ${{ steps.timestamp.outputs.timestamp }}
 
       - name: Save split cache
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
@@ -89,6 +96,7 @@ jobs:
           publish_dir: ./cached-split
           force_orphan: true
           enable_jekyll: true # .nojekyll is not needed
+          full_commit_message: ${{ steps.timestamp.outputs.timestamp }}
 
   mirror:
     runs-on: ubuntu-latest
