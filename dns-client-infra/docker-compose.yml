@@ -2,6 +2,7 @@ services:
   zonefile-updater:
     build:
       context: zonefile-updater/_build
+    restart: unless-stopped
     environment:
       - GIT_REPO_STORE=/zonefiles
       - GIT_REPO_URL=https://codeberg.org/litetex/rbldnsd-zone-asn.git
@@ -13,6 +14,7 @@ services:
   rbldnsd:
     build:
       context: rbldnsd/_build
+    restart: unless-stopped
     depends_on:
       - zonefile-updater
     networks:
