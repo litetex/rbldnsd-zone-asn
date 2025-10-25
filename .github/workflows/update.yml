@@ -39,6 +39,7 @@ jobs:
         uses: actions/checkout@v5
         continue-on-error: true # Branch may not exist
         with:
+          repository: 'litetex/rbldnsd-zone-asn-cache'
           ref: 'cached'
           path: 'cached'
       
@@ -46,6 +47,7 @@ jobs:
         uses: actions/checkout@v5
         continue-on-error: true # Branch may not exist
         with:
+          repository: 'litetex/rbldnsd-zone-asn-cache'
           ref: 'cached-split'
           path: 'cached-split'
 
@@ -79,24 +81,26 @@ jobs:
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         continue-on-error: true # Just cache
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.CACHE_REPO_TOKEN }}
           publish_branch: cached
           publish_dir: ./cached
           force_orphan: true
           enable_jekyll: true # .nojekyll is not needed
-          exclude_assets: 'latest-bview.gz' # Too big for repo
           full_commit_message: ${{ steps.timestamp.outputs.timestamp }}
+          external_repository: 'litetex/rbldnsd-zone-asn-cache'
+          exclude_assets: 'latest-bview.gz' # Too big for repo
 
       - name: Save split cache
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         continue-on-error: true # Just cache
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.CACHE_REPO_TOKEN }}
           publish_branch: cached-split
           publish_dir: ./cached-split
           force_orphan: true
           enable_jekyll: true # .nojekyll is not needed
           full_commit_message: ${{ steps.timestamp.outputs.timestamp }}
+          external_repository: 'litetex/rbldnsd-zone-asn-cache'
 
   mirror:
     runs-on: ubuntu-latest
