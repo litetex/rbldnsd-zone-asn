@@ -108,7 +108,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - run: |
-          git clone --bare https://github.com/litetex/rbldnsd-zone-asn.git --single-branch --branch generated
+          git clone --bare https://github.com/litetex/rbldnsd-zone-asn.git
           cd rbldnsd-zone-asn.git
           echo "Starting push"
           git push --mirror https://litetex:${{ secrets.CB_TOKEN }}@codeberg.org/litetex/rbldnsd-zone-asn.git
