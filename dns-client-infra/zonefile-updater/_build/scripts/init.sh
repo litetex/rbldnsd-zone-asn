@@ -16,4 +16,6 @@ while true; do
     git reset --hard origin/$GIT_BRANCH || true
 
     sleep $UPDATE_INTERVAL
+    # Randomly sleep a moment to not always run at the exact same moment
+    sleep $(shuf -i 1-20 -n 1)
 done
