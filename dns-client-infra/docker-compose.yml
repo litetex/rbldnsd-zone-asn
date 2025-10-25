@@ -19,7 +19,9 @@ services:
       - zonefile-updater
     networks:
       asn-res:
-        ipv6_address: fd00:5353::99
+        aliases:
+          - v4.asnresolver.internal
+          - v6.asnresolver.internal
     ports:
       - 5353:5353
     volumes:
@@ -36,9 +38,3 @@ networks:
   asn-res:
     name: "asn-res"
     enable_ipv6: true
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: fd00:5353::/120
-          gateway: fd00:5353::1
