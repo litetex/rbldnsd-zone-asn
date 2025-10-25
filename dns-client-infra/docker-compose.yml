@@ -8,6 +8,9 @@ services:
       - GIT_REPO_URL=https://codeberg.org/litetex/rbldnsd-zone-asn.git
       - GIT_BRANCH=generated
       - UPDATE_INTERVAL=1h
+    networks:
+      # Use dedicated network that can do DNS resolution
+      - zonefile-updater
     volumes:
       - ./_data/zonefiles:/zonefiles
     deploy:
@@ -26,8 +29,6 @@ services:
         aliases:
           - v4.asnresolver.internal
           - v6.asnresolver.internal
-    ports:
-      - 5353:5353
     volumes:
       - ./_data/zonefiles:/zonefiles
     deploy:
@@ -43,6 +44,8 @@ services:
       - asn-res
 
 networks:
+  zonefile-updater:
+    enable_ipv6: true
   asn-res:
     name: "asn-res"
     enable_ipv6: true
