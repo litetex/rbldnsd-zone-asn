@@ -2,7 +2,7 @@ name: Updater
 
 on:
   schedule:
-    - cron: '55 5 * * *'
+    - cron: '34 3 * * *'
   workflow_dispatch:
     inputs:
       skip_download:
@@ -16,7 +16,7 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v5
 
