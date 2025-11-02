@@ -81,7 +81,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         continue-on-error: true # Just cache
         with:
-          github_token: ${{ secrets.CACHE_REPO_TOKEN }}
+          personal_token: ${{ secrets.CACHE_REPO_TOKEN }}
           publish_branch: cached
           publish_dir: ./cached
           force_orphan: true
@@ -94,7 +94,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         continue-on-error: true # Just cache
         with:
-          github_token: ${{ secrets.CACHE_REPO_TOKEN }}
+          personal_token: ${{ secrets.CACHE_REPO_TOKEN }}
           publish_branch: cached-split
           publish_dir: ./cached-split
           force_orphan: true
