@@ -9,6 +9,10 @@ on:
         type: boolean
         description: 'Skip download'
         default: false
+      force_orphan_generated:
+        type: boolean
+        description: 'Force orphan generated branch'
+        default: false
 
 permissions:
   contents: write
@@ -74,6 +78,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: generated
           publish_dir: ./out
+          force_orphan: ${{ inputs.force_orphan_generated }}
           enable_jekyll: true # .nojekyll is not needed
           full_commit_message: ${{ steps.timestamp.outputs.timestamp }}
 
