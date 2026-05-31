@@ -73,7 +73,7 @@ jobs:
           echo "timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_OUTPUT
 
       - name: Save generated
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: generated
@@ -83,7 +83,7 @@ jobs:
           full_commit_message: ${{ steps.timestamp.outputs.timestamp }}
 
       - name: Save cache
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4
         continue-on-error: true # Just cache
         with:
           personal_token: ${{ secrets.CACHE_REPO_TOKEN }}
@@ -96,7 +96,7 @@ jobs:
           exclude_assets: 'latest-bview.gz' # Too big for repo
 
       - name: Save split cache
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4
         continue-on-error: true # Just cache
         with:
           personal_token: ${{ secrets.CACHE_REPO_TOKEN }}
