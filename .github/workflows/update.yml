@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -40,7 +40,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Checkout cache branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         continue-on-error: true # Branch may not exist
         with:
           repository: 'litetex/rbldnsd-zone-asn-cache'
@@ -48,7 +48,7 @@ jobs:
           path: 'cached'
       
       - name: Checkout split cache branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         continue-on-error: true # Branch may not exist
         with:
           repository: 'litetex/rbldnsd-zone-asn-cache'
